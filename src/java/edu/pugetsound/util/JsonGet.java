@@ -6,12 +6,10 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -28,7 +26,7 @@ import org.apache.http.HttpResponse;
  * working location. Source and target parameters below are necessary to work 
  * with the Java shipped with PeopleTools 8.55.
  *
- * javac -source 1.7 -target 1.7 -cp httpclient-4.5.5.jar;httpcore-4.4.9.jar edu/pugetsound/util/JsonPost.java
+ * javac -source 1.7 -target 1.7 -cp httpclient-4.5.5.jar;httpcore-4.4.9.jar edu/pugetsound/util/JsonGet.java
  * jar cvf up_jsonpost.jar edu/pugetsound/util/*.class
  *
  * Place the resulting up_jsonpost.jar along with the httpclient and httpcore jars 
@@ -36,12 +34,10 @@ import org.apache.http.HttpResponse;
  * Process Scheduler to get Application Engine programs to see the jar.
  */
  
-public class JsonPost
+public class JsonGet
 {
     /* Object properties */
     private String serviceUrl;
-    private String contentType;
-    private String jsonMessage;
     private String authHost;
     private String authPort;
     private String authRealm;
@@ -60,7 +56,7 @@ public class JsonPost
     private boolean exceptionWasThrown;
     private Exception thrownException;
     
-    public JsonPost()
+    public JsonGet()
     {
         /* When we start, we have not thrown an exception yet. */
         this.exceptionWasThrown = false;
@@ -73,16 +69,6 @@ public class JsonPost
         this.serviceUrl = serviceUrl;
     }
     
-    public void setContentType(final String contentType)
-    {
-        this.contentType = contentType;
-    }
-    
-    public void setJsonMessage(final String jsonMessage)
-    {
-        this.jsonMessage = jsonMessage;
-    }
-
     public void setAuthHost(final String authHost)
     {
         this.authHost = authHost;
@@ -152,25 +138,13 @@ public class JsonPost
               .build();
             
             
-            /* Create the method that will POST to the serviceUrl */
-            HttpPost post = new HttpPost(serviceUrl);
+            /* Create the method that will GET the serviceUrl */
+            HttpGet get = new HttpGet(serviceUrl);
             
             /* Attach our accumulated headers to the POST method */
-            post.setHeaders(this.requestHeaderGroup.getAllHeaders());
+            get.setHeaders(this.requestHeaderGroup.getAllHeaders());
             
-            /* Create the JSON message and attach it to the POST method */
-            StringEntity inputEntity;
-            if (contentType == null)
-            {
-                inputEntity = new StringEntity(jsonMessage);
-            }
-            else
-            {
-                inputEntity = new StringEntity(jsonMessage, ContentType.create(contentType));
-            }
-            post.setEntity(inputEntity);
-            
-            /* POST the message */
+            /* GET the response */
             /* If I'm authenticating, set up a context with a credentials provider to use */
             CloseableHttpResponse response;
             if (this.authUsername != null && this.authPassword != null)
@@ -194,11 +168,11 @@ public class JsonPost
                 HttpClientContext context = HttpClientContext.create();
                 context.setCredentialsProvider(credsProvider);
                 /* Now execute the request using the context */
-                response = client.execute(post, context);
+                response = client.execute(get, context);
             }
             else
             {
-                response = client.execute(post);
+                response = client.execute(get);
             }
             
             /* Get the output from the response and set the status code */
