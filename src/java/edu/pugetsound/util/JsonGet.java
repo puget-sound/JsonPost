@@ -20,18 +20,16 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
 /**
- * To compile:
- * (Change / to backslash on Windows)
- * Place this file in a directory tree edu/pugetsound/util below your current
- * working location. Source and target parameters below are necessary to work 
- * with the Java shipped with PeopleTools 8.55.
+ * To compile (in 2025, recompiled on Windows):
+ * 
+ * Unpack the jar in your Downloads directory
  *
- * javac -source 1.7 -target 1.7 -cp httpclient-4.5.5.jar;httpcore-4.4.9.jar edu/pugetsound/util/JsonGet.java
- * jar cvf up_jsonpost.jar edu/pugetsound/util/*.class
+ * (Change forward slashes in Windows paths to backslashes)
+ * C:/Users/srenker/Downloads>C:/PT8.60.13_Client_ORA/jre/bin/javac -cp C:/PT8.60.13_Client_ORA/class/httpclient.jar;C:/PT8.60.13_Client_ORA/class/httpcore.jar edu/pugetsound/util/JsonGet.java
+ * C:/Users/srenker/Downloads>C:/PT8.60.13_Client_ORA/jre/bin/jar cvf up_jsonpost.jar edu/pugetsound/util/*.class
  *
- * Place the resulting up_jsonpost.jar along with the httpclient and httpcore jars 
- * in the class folder under your PeopleTools installation. You may need to bounce 
- * Process Scheduler to get Application Engine programs to see the jar.
+ * Place the resulting up_jsonpost.jar in the class folder under your PeopleSoft application home installation.
+ * Bounce Process Scheduler to get Application Engine programs to see the jar.
  */
  
 public class JsonGet
